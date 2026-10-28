@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -6,10 +7,18 @@ import {
   Outlet,
 } from "react-router-dom";
 import Layout from "./components/Layout";
-import Home from "./Pages/Home";
-import Login from "./Pages/Login";
-import SignUp from "./Pages/SignUp";
-import ErrorPage from "./Pages/ErrorPage";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import ErrorPage from "./pages/ErrorPage";
+
+function ScrollToTopOnRouteChange() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
 
 function MainLayout() {
   return (
@@ -19,22 +28,21 @@ function MainLayout() {
   );
 }
 
-const App = () => {
+export default function App() {
   return (
     <BrowserRouter>
+      {/* <ScrollToTopOnRouteChange /> */}
       <Routes>
-        {/* Page Without Layout */}
+        {/* Auth routes without Layout */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="*" element={<ErrorPage />} />
 
-        {/* Page Without Layout */}
+        {/* Routes wrapped with Layout */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
         </Route>
       </Routes>
     </BrowserRouter>
   );
-};
-
-export default App;
+}
