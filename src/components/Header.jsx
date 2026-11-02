@@ -2,9 +2,12 @@ import { useState } from "react";
 import Logo from "./Logo";
 import { headerData } from "../constants/menuData";
 import HeaderLink from "./HeaderLink";
+import { Icon } from "@iconify/react";
+import { useTheme } from "next-themes";
 
 const Header = () => {
   const [sticky, setSticky] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   const handleScrool = () => {
     setSticky(window.scrollY >= 80);
@@ -28,7 +31,24 @@ const Header = () => {
         </ul>
 
         <div className="flex items-center gap-4">
-          <button className="flex items-center justify-center text-body-color duration-300 hover:cursor-pointer hover:text-primary dark:text-white bg-white rounded-lg p-2 outline-none"></button>
+          <button
+            aria-label="Toggle theme"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="flex items-center justify-center text-body-color duration-300 hover:cursor-pointer hover:text-primary dark:text-white bg-white rounded-lg p-2 outline-none"
+          >
+            <Icon
+              icon="solar:sun-2-bold"
+              width="24"
+              height="24"
+              className="hidden dark:block"
+            />
+            <Icon
+              icon="solar:moon-bold"
+              width="24"
+              height="24"
+              className="dark:hidden block"
+            />
+          </button>
         </div>
       </div>
     </header>
