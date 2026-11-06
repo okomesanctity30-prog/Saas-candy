@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import ErrorPage from "./pages/ErrorPage";
+import Portfolio from "./pages/Portfolio";
 
 function ScrollToTopOnRouteChange() {
   const { pathname } = useLocation();
@@ -41,6 +42,7 @@ export default function App() {
         {/* Routes wrapped with Layout */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/portfolio" element={<Portfolio />} />
         </Route>
       </Routes>
     </BrowserRouter>

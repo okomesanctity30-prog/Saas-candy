@@ -1,14 +1,15 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Logo from "./Logo";
 import { headerData } from "../constants/menuData";
 import HeaderLink from "./HeaderLink";
 import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
 import { Link } from "react-router-dom";
+import MobileHeaderLink from "./MobileHeaderLink";
 
 const Header = () => {
   const [sticky, setSticky] = useState(false);
-  const [navbarOpen, setNavbarOpen] = useState(true);
+  const [navbarOpen, setNavbarOpen] = useState(false);
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 
@@ -22,9 +23,30 @@ const Header = () => {
     setSticky(window.scrollY >= 80);
   };
 
-  // const handleclickOutside = (event) => {
+  const handleclickOutside = (event) => {
+    if (signInRef.current && !signInRef.current.contins(event.target)) {
+      setIsSignInOpen(false);
+    }
+    if (signInRef.current && !signUpRef.current.contins(event.target)) {
+      setIsSignUpOpen(false);
+    }
+    if (
+      mobileMenuRef.current &&
+      !mobileMenuRef.current.contains(event.target) &&
+      navbarOpen
+    ) {
+      setNavbarOpen(false);
+    }
+  };
 
-  // }
+  useEffect(() => {
+    window.addEventListener("scroll", handleScrool);
+    document.addEventListener("mousedown", handleclickOutside);
+    return () => {
+      window.removeEventListener("scroll", handleScrool);
+      document.removeEventListener("mousedown", handleclickOutside);
+    };
+  }, [navbarOpen, isSignInOpen, isSignUpOpen]);
   return (
     <header
       className={`fixed top-0 py-1 z-50 w-full bg-transparent transition-all ${
@@ -119,6 +141,12 @@ const Header = () => {
             </svg>
           </button>
         </div>
+
+        <nav className="flex flex-col items-start p-4">
+          {headerData.map((item, index) => (
+            <MobileHeaderLink key={index} item={item} />
+          ))}
+        </nav>
       </div>
     </header>
   );
